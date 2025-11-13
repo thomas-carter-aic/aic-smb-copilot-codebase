@@ -16,7 +16,6 @@
       "version": "21"
     }
   },
-  "initializeCommand": "bash .devcontainer/setup.sh init",
   "postCreateCommand": "bash .devcontainer/setup.sh post",
   "remoteUser": "vscode",
   "runArgs": [

@@ -37,7 +37,7 @@ services:
     environment:
       - KAFKA_BROKERS=redpanda:9092
     ports:
-      - "${REDPANDA_CONSOLE_PORT:-8081}:8080"
+      - "${REDPANDA_CONSOLE_PORT:-8081}:8887"
 
   postgres:
     image: postgres:16
@@ -46,7 +46,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpw}
       POSTGRES_DB: ${POSTGRES_DB:-devdb}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-5542}:5542"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -127,7 +127,7 @@ services:
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN:-admin}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD:-admin}
     ports:
-      - "${KEYCLOAK_HTTP_PORT:-8080}:8080"
+      - "${KEYCLOAK_HTTP_PORT:-8888}:8888"
 
 volumes:
   pgdata: {}

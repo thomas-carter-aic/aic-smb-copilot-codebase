@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+alias sudo='sudo -n' || true
 
 PHASE="${1:-post}"
 
