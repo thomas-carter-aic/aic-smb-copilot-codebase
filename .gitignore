@@ -1,0 +1,20 @@
+# languages
+node_modules/
+dist/
+build/
+target/
+.venv/
+__pycache__/
+*.pyc
+
+# tooling
+.site/
+site/
+.mypy_cache/
+.pytest_cache/
+
+# docker & local env
+dev/.env
+.env
+*.local
+.DS_Store
