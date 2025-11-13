@@ -1,0 +1,22 @@
+
+syntax = "proto3";
+package orders.v1;
+option go_package = "github.com/org/repo/contracts/gen/orders/v1;ordersv1";
+
+message CreateOrderRequest {
+  string tenant_id = 1;
+  string order_id = 2;
+  string currency = 3;
+  double total_amount = 4;
+}
+message CreateOrderResponse { string order_id = 1; string status = 2; }
+message GetOrderRequest { string tenant_id = 1; string order_id = 2; }
+message GetOrderResponse {
+  string order_id = 1;
+  string tenant_id = 2;
+  string status = 3;
+  double total_amount = 4;
+  string currency = 5;
+}
+service OrdersCommand { rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse); }
+service OrdersQuery { rpc GetOrder(GetOrderRequest) returns (GetOrderResponse); }

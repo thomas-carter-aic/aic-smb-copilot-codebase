@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "ms-azuretools.vscode-docker",
+    "golang.go",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "EditorConfig.EditorConfig"
+  ]
+}

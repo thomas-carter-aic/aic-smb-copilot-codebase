@@ -1,0 +1,8 @@
+
+{
+  "name": "api-gateway",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node src/index.js" },
+  "dependencies": { "node-fetch": "^3.3.2", "fastify": "^4.26.2" }
+}

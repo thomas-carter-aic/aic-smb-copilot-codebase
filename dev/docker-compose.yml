@@ -1,0 +1,134 @@
+version: "3.8"
+
+services:
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp=1
+      - --memory=1G
+      - --reserve-memory=0M
+      - --node-id=0
+      - --check=false
+      - --kafka-addr=0.0.0.0:9092
+      - --advertise-kafka-addr=redpanda:9092
+      - --pandaproxy-addr=0.0.0.0:8082
+      - --advertise-pandaproxy-addr=redpanda:8082
+    ports:
+      - "${REDPANDA_BROKER_PORT:-9092}:9092"
+      - "${REDPANDA_ADMIN_PORT:-9644}:9644"
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "info", "-X", "brokers=redpanda:9092"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    environment:
+      - KAFKA_BROKERS=redpanda:9092
+    ports:
+      - "${REDPANDA_CONSOLE_PORT:-8081}:8080"
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpw}
+      POSTGRES_DB: ${POSTGRES_DB:-devdb}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":${MINIO_CONSOLE_PORT:-9001}"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio:/data
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "${MAILHOG_PORT:-8025}:8025"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "${OTEL_GRPC_PORT:-4317}:4317"
+      - "${OTEL_HTTP_PORT:-4318}:4318"
+      - "${OTEL_PROM_PORT:-8889}:8889"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+
+  loki:
+    image: grafana/loki:2.9.8
+    command: ["-config.file=/etc/loki/config.yml"]
+    volumes:
+      - ./loki-config.yaml:/etc/loki/config.yml:ro
+    ports:
+      - "${LOKI_PORT:-3100}:3100"
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.52
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "${JAEGER_UI_PORT:-16686}:16686"
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - jaeger
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command: ["start-dev"]
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN:-admin}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    ports:
+      - "${KEYCLOAK_HTTP_PORT:-8080}:8080"
+
+volumes:
+  pgdata: {}
+  minio: {}

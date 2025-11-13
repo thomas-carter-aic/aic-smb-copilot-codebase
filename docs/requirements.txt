@@ -1,0 +1,5 @@
+mkdocs-material
+mkdocs-mermaid2-plugin
+mkdocs-section-index
+mkdocs-git-revision-date-localized-plugin
+pymdown-extensions

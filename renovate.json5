@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits", ":enableVulnerabilityAlerts"],
+  "rangeStrategy": "bump",
+  "labels": ["dependencies"],
+  "packageRules": [
+    { "matchManagers": ["dockerfile"], "groupName": "docker base images" },
+    { "matchManagers": ["github-actions"], "groupName": "GitHub Actions" }
+  ],
+  "prHourlyLimit": 5
+}

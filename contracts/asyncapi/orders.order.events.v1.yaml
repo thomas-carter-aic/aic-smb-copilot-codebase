@@ -1,0 +1,62 @@
+
+asyncapi: 3.0.0
+info: { title: orders.order.events, version: 1.0.0 }
+channels:
+  orders.order.events.v1:
+    address: orders.order.events.v1
+    messages:
+      OrderCreated:
+        name: OrderCreated
+        payload:
+          type: object
+          properties:
+            eventId: { type: string }
+            orderId: { type: string }
+            tenantId: { type: string }
+            currency: { type: string }
+            totalAmount: { type: number }
+            version: { type: integer }
+            timestamp: { type: string }
+      PaymentRequested:
+        name: PaymentRequested
+        payload:
+          type: object
+          properties:
+            eventId: { type: string }
+            orderId: { type: string }
+            tenantId: { type: string }
+            amount: { type: number }
+            currency: { type: string }
+            version: { type: integer }
+            timestamp: { type: string }
+      PaymentSucceeded:
+        name: PaymentSucceeded
+        payload:
+          type: object
+          properties:
+            eventId: { type: string }
+            orderId: { type: string }
+            tenantId: { type: string }
+            providerRef: { type: string }
+            version: { type: integer }
+            timestamp: { type: string }
+      OrderPaid:
+        name: OrderPaid
+        payload:
+          type: object
+          properties:
+            eventId: { type: string }
+            orderId: { type: string }
+            tenantId: { type: string }
+            version: { type: integer }
+            timestamp: { type: string }
+      OrderFulfilled:
+        name: OrderFulfilled
+        payload:
+          type: object
+          properties:
+            eventId: { type: string }
+            orderId: { type: string }
+            tenantId: { type: string }
+            version: { type: integer }
+            timestamp: { type: string }

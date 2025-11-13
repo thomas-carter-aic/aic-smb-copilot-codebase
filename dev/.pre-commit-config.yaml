@@ -1,0 +1,44 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+      - id: ruff-format
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.59.1
+    hooks:
+      - id: golangci-lint
+        additional_dependencies: []
+        files: \.go$
+
+  - repo: https://github.com/prettier/prettier
+    rev: 3.3.3
+    hooks:
+      - id: prettier
+        additional_dependencies: ['prettier@3.3.3']
+        files: "\.(ts|tsx|js|jsx|json|md|yaml|yml)$"
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.3
+    hooks:
+      - id: actionlint
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks

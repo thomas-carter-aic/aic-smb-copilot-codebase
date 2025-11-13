@@ -1,0 +1,4 @@
+# Tilt: use docker-compose for local dev stack
+docker_compose('docker-compose.yml')
+# Uncomment to add service-specific live_update rules
+# k8s_yaml(['deploy/k8s/overlays/dev'])  # if using k8s with k3d/kind

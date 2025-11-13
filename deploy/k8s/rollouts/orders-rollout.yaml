@@ -1,0 +1,24 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata: { name: orders, namespace: platform }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: orders } }
+  template:
+    metadata: { labels: { app: orders } }
+    spec:
+      containers:
+        - name: orders
+          image: ghcr.io/OWNER/REPO/orders:latest
+          ports: [{ name: http, containerPort: 8080 }]
+          readinessProbe: { httpGet: { path: /health, port: http }, initialDelaySeconds: 3 }
+  strategy:
+    canary:
+      canaryService: orders-canary
+      stableService: orders-stable
+      steps:
+        - setWeight: 20
+        - pause: { duration: 60 }
+        - setWeight: 50
+        - pause: { duration: 120 }

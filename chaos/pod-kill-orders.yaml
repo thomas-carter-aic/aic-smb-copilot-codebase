@@ -1,0 +1,11 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata: { name: kill-orders }
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces: [ platform ]
+    labelSelectors: { app: orders }
+  duration: '30s'
+  scheduler: { cron: '@daily' }

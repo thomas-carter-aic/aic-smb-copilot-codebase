@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata: { name: p95-latency-ok }
+spec:
+  metrics:
+    - name: p95
+      successCondition: result < 250
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{app="api-gateway"}[5m])) by (le))
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata: { name: error-rate-ok }
+spec:
+  metrics:
+    - name: error_rate
+      successCondition: result < 0.02
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: sum(rate(http_requests_total{app="api-gateway",code=~"5.."}[5m])) / sum(rate(http_requests_total{app="api-gateway"}[5m]))

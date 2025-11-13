@@ -1,0 +1,5 @@
+# Code ownership
+*       @your-org/platform-core
+/services/api-gateway/   @your-org/edge
+/services/orders/        @your-org/orders
+/contracts/              @your-org/platform-core

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: api-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: api-gateway }
+  template:
+    metadata: { labels: { app: api-gateway } }
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/ORG/REPO/api-gateway:sha-REPLACEME
+          ports: [{ name: http, containerPort: 8080 }]
+  strategy:
+    canary:
+      canaryService: api-gateway-canary
+      stableService: api-gateway-stable
+      trafficRouting:
+        istio: { virtualService: api-gateway, routes: [ primary ] }
+      steps:
+        - setWeight: 10
+        - pause: { duration: 120 }
+        - analysis:
+            templates: [{ templateName: p95-latency-ok }]
+        - setWeight: 50
+        - pause: { duration: 180 }
+        - analysis:
+            templates: [{ templateName: error-rate-ok }]

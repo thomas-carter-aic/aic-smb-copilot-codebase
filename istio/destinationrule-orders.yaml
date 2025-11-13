@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata: { name: orders }
+spec:
+  host: orders.platform.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp: { maxConnections: 100 }
+      http: { http1MaxPendingRequests: 1000, maxRequestsPerConnection: 100 }
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 5s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+    retryPolicy:
+      retryOn: 5xx,reset,gateway-error,connect-failure,refused-stream
+      attempts: 3
+      perTryTimeout: 500ms

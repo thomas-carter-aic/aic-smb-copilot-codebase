@@ -1,0 +1,57 @@
+site_name: AI-Native Platform Docs
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quickstart: getting-started.md
+    - Developer Environment: development/environment.md
+    - Contributing: development/contributing.md
+    - Coding Standards: development/coding-standards.md
+    - Release & CI/CD: development/release.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - C4 System Context: architecture/c4-system-context.md
+    - C4 Container Diagram: architecture/c4-container.md
+    - Orders Vertical Slice: architecture/c4-orders-slice.md
+    - Eventing (CQRS/ES/Sagas): architecture/eventing.md
+    - ADRs:
+      - Index: architecture/adr/index.md
+      - Template: architecture/adr/0000-template.md
+      - 0001 Language & Monorepo: architecture/adr/0001-language-and-monorepo.md
+      - 0002 Contracts-First: architecture/adr/0002-contracts-first.md
+      - 0003 Event Store: architecture/adr/0003-event-store.md
+      - 0004 CQRS & Sagas: architecture/adr/0004-cqrs-and-sagas.md
+      - 0005 Multi-tenancy: architecture/adr/0005-multi-tenancy.md
+      - 0006 Gateway & APIs: architecture/adr/0006-api-gateway-and-protocols.md
+      - 0007 Service Mesh: architecture/adr/0007-service-mesh.md
+      - 0008 CI Security & Supply Chain: architecture/adr/0008-ci-security-supply-chain.md
+      - 0009 Observability: architecture/adr/0009-observability.md
+      - 0010 Secrets & Identity: architecture/adr/0010-secrets-and-identity.md
+      - 0011 Deploy Strategy & GitOps: architecture/adr/0011-deploy-strategy-and-gitops.md
+      - 0012 Data Governance & Privacy: architecture/adr/0012-data-governance-and-privacy.md
+      - 0013 Testing Strategy: architecture/adr/0013-testing-strategy.md
+      - 0014 Versioning & Compatibility: architecture/adr/0014-versioning-and-compatibility.md
+      - 0015 Feature Flags: architecture/adr/0015-feature-flags.md
+  - API & Contracts:
+    - API Guidelines: api/api-guidelines.md
+    - Event Naming & Evolution: api/event-naming.md
+    - Contracts Layout: api/README.md
+  - Security:
+    - Security Model: security/security-model.md
+    - Threat Model: security/threat-model.md
+  - Operations:
+    - SLOs: operations/slo.md
+    - On-call Runbook: operations/runbooks/oncall.md
+    - Incident Response: operations/runbooks/incident-response.md
+    - Rebuild Projections: operations/playbooks/rebuild-projections.md
+  - Governance:
+    - Versioning Policy: governance/versioning-policy.md
+  - Reference:
+    - Glossary: glossary.md
+    - FAQ: faq.md

@@ -1,0 +1,84 @@
+{
+  "name": "AI-Native Monorepo Dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.22"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21"
+    }
+  },
+  "initializeCommand": "bash .devcontainer/setup.sh init",
+  "postCreateCommand": "bash .devcontainer/setup.sh post",
+  "remoteUser": "vscode",
+  "runArgs": [
+    "--privileged"
+  ],
+  "forwardPorts": [
+    3000,
+    9090,
+    16686,
+    8081,
+    9001,
+    8025,
+    8080,
+    4317,
+    4318,
+    8889,
+    3100
+  ],
+  "containerEnv": {
+    "DOCKER_BUILDKIT": "1",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "golang.go",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "redhat.vscode-yaml",
+        "GraphQL.vscode-graphql",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "files.eol": "\n",
+        "editor.tabSize": 2,
+        "go.testFlags": [
+          "-v"
+        ],
+        "python.analysis.typeCheckingMode": "basic",
+        "eslint.validate": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "json"
+        ],
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "yaml.schemas": {
+          "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+        }
+      }
+    }
+  }
+}

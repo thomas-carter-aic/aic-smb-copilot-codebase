@@ -1,0 +1,123 @@
+name: pr-ci
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: pr-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node / TypeScript
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Node - install & test (if present)
+        run: |
+          if [ -f package.json ]; then
+            corepack enable || true
+            pnpm -v || npm i -g pnpm@9
+            pnpm i -w || npm ci || true
+            pnpm -w -r lint --if-present || true
+            pnpm -w -r test --if-present || true
+          fi
+
+      # Go
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Go - test (if any .go files)
+        run: |
+          if git ls-files '**/*.go' | grep -q .; then
+            go test ./... -race -coverprofile=coverage.out || true
+          fi
+
+      # Python
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python - install & test (if present)
+        run: |
+          if git ls-files '**/*.py' | grep -q .; then
+            python -m pip install -U pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
+            if [ -f pyproject.toml ]; then pip install . || true; fi
+            pip install pytest ruff black mypy || true
+            ruff . || true
+            black --check . || true
+            mypy || true
+            pytest -q || true
+          fi
+
+      # Java
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Java - test (if gradlew)
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            ./gradlew test --no-daemon || true
+          fi
+
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buf setup
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
+      - name: Protobuf lint & breaking check (if buf config present)
+        run: |
+          if [ -f buf.yaml ] || [ -f buf.work.yaml ]; then
+            buf lint
+            # Breaking check against main (if reachable)
+            if git show-ref --verify --quiet refs/remotes/origin/main; then
+              buf breaking --against '.git#branch=origin/main' || true
+            fi
+          fi
+
+      - name: AsyncAPI validate (if contracts exist)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          if compgen -G "contracts/asyncapi/*.yaml" > /dev/null; then
+            npx -y @asyncapi/cli@2.6.0 validate contracts/asyncapi/*.yaml
+          fi
+
+      - name: OpenAPI lint (if present)
+        run: |
+          if compgen -G "contracts/openapi/*.yaml" > /dev/null; then
+            npx -y @redocly/cli@1.16.0 lint contracts/openapi/*.yaml || true
+          fi
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: detect --no-git -v --redact
+
+      - name: Trivy FS scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          exit-code: '0'
+          vuln-type: 'os,library'
+

@@ -1,0 +1,43 @@
+# Run with `just <recipe>`
+set shell := ["bash", "-cu"]
+
+# Load .env if present
+export-file := if path-exists("dev/.env") { "dev/.env" } else { "/dev/null" }
+
+default:
+  @just --list
+
+dev-up:
+  # Starts the local developer stack
+  docker compose --env-file {{export-file}} -f dev/docker-compose.yml up -d
+
+dev-down:
+  docker compose --env-file {{export-file}} -f dev/docker-compose.yml down
+
+dev-logs:
+  docker compose --env-file {{export-file}} -f dev/docker-compose.yml logs -f --tail=200
+
+dev-reset:
+  docker compose --env-file {{export-file}} -f dev/docker-compose.yml down -v
+  docker compose --env-file {{export-file}} -f dev/docker-compose.yml up -d
+
+fmt:
+  echo "Run formatters (ts/go/py/java)"; true
+
+lint:
+  echo "Run linters (eslint/golangci/ruff/spotless)"; true
+
+test:
+  echo "Run unit & integration tests"; true
+
+proto:
+  echo "Run buf generate and language plugins"; true
+
+contracts:
+  echo "Validate AsyncAPI/OpenAPI specs"; true
+
+scan:
+  echo "Run gitleaks/trivy/actionlint"; true
+
+preview pr='':
+  echo "Preview env placeholder for PR {{pr}}"; true

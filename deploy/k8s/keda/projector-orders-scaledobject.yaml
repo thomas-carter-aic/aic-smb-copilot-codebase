@@ -1,0 +1,17 @@
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata: { name: projector-orders, namespace: platform }
+spec:
+  scaleTargetRef: { name: projector-orders }
+  pollingInterval: 30
+  cooldownPeriod: 120
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: redpanda.platform.svc.cluster.local:9092
+        consumerGroup: projector-orders
+        topic: orders.order.events.v1
+        lagThreshold: "5000"

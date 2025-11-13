@@ -1,0 +1,17 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-standard-labels
+spec:
+  validationFailureAction: enforce
+  rules:
+    - name: require-app-team-env
+      match: { resources: { kinds: ["Deployment","StatefulSet"] } }
+      validate:
+        message: "require app.kubernetes.io/name, team, and env labels"
+        pattern:
+          metadata:
+            labels:
+              app.kubernetes.io/name: "?*"
+              team: "?*"
+              env: "?*"

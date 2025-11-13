@@ -1,0 +1,25 @@
+{
+  "editor.formatOnSave": true,
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "go.testFlags": [
+    "-v"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  }
+}

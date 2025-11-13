@@ -1,0 +1,18 @@
+# ADR Index
+- [ADR 0001](0001-language-and-monorepo.md)
+- [ADR 0002](0002-contracts-first.md)
+- [ADR 0003](0003-event-store.md)
+- [ADR 0004](0004-cqrs-and-sagas.md)
+- [ADR 0005](0005-multi-tenancy.md)
+- [ADR 0006](0006-api-gateway-and-protocols.md)
+- [ADR 0007](0007-service-mesh.md)
+- [ADR 0008](0008-ci-security-supply-chain.md)
+- [ADR 0009](0009-observability.md)
+- [ADR 0010](0010-secrets-and-identity.md)
+- [ADR 0011](0011-deploy-strategy-and-gitops.md)
+- [ADR 0012](0012-data-governance-and-privacy.md)
+- [ADR 0013](0013-testing-strategy.md)
+- [ADR 0014](0014-versioning-and-compatibility.md)
+- [ADR 0015](0015-feature-flags.md)
+
+> Template: [ADR 0000](0000-template.md)
