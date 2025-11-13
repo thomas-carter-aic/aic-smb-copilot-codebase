@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: ghcr.io/OWNER/REPO/api-gateway:latest
+          image: ghcr.io/thomas-carter-aic/aic-smb-copilot-codebase/api-gateway:latest
           ports: [{ containerPort: 8080, name: http }]
           readinessProbe: { httpGet: { path: /health, port: http }, initialDelaySeconds: 3 }
           livenessProbe:  { httpGet: { path: /health, port: http }, initialDelaySeconds: 10 }

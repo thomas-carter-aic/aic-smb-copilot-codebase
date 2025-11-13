@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: orders
-          image: ghcr.io/OWNER/REPO/orders:latest
+          image: ghcr.io/thomas-carter-aic/aic-smb-copilot-codebase/orders:latest
           ports: [{ containerPort: 8080, name: http }]
           readinessProbe: { httpGet: { path: /health, port: http }, initialDelaySeconds: 3 }
           livenessProbe:  { httpGet: { path: /health, port: http }, initialDelaySeconds: 10 }

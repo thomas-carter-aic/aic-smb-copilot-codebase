@@ -4,10 +4,10 @@ kind: ClusterImagePolicy
 metadata: { name: verified-images }
 spec:
   images:
-    - glob: ghcr.io/OWNER/REPO/*
+    - glob: ghcr.io/thomas-carter-aic/aic-smb-copilot-codebase/*
   authorities:
     - keyless:
         url: https://fulcio.sigstore.dev
         identities:
           - issuer: https://token.actions.githubusercontent.com
-            subject: "https://github.com/OWNER/REPO/.github/workflows/build-sign.yml@*"
+            subject: "https://github.com/thomas-carter-aic/aic-smb-copilot-codebase/.github/workflows/build-sign.yml@**"
